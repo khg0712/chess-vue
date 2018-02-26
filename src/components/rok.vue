@@ -1,5 +1,5 @@
 <template>
-    <img :src="rok">
+    <img :src="rok" @click="pieceClick">
 </template>
 
 <script>
@@ -14,6 +14,11 @@ export default {
     props : ['color','data-x','data-y'],
     created : function() {
         this.rok = require("../assets/chess-rok-" + this.color + ".png")
+    },
+    methods : {
+        pieceClick : function() {
+            this.$emit('clickPiece','rok', this['data-x'], this['data-y'])
+        }
     }
 }   
 </script>

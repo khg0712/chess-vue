@@ -1,5 +1,5 @@
 <template>
-    <img :src="bishop">
+    <img :src="bishop" @click="pieceClick">
 </template>
 
 <script>
@@ -13,6 +13,11 @@ export default {
     props : ['color','data-x','data-y'],
     created : function() {
         this.bishop =  require("../assets/chess-bishop-" + this.color + ".png")
+    },
+    methods : {
+        pieceClick : function() {
+            this.$emit('clickPiece','bishop', this['data-x'], this['data-y'])
+        }
     }
 }   
 </script>

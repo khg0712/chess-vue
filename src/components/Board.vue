@@ -4,13 +4,14 @@
             <tbody class="board-wraaper">
                 <tr v-for="(i, y) in chess_board">
                     <td v-for="(j, x) in i">
-                        <component :is="j.piece" :data-x="x" :data-y="y" :color="j.color" @pieceClick="pieceClick" :class="board_color(x,y), effected(x, y, j.effected)"></component>
+                        <component :is="j.piece" :data-x="x" :data-y="y" :color="j.color" @pieceClick="pieceClick" :class="[board_color(x,y), effected(x, y, j.effected)]"></component>
                     </td>
                 </tr>
             </tbody>
         </table>
     </div>
 </template>
+
 <script>
 import pawn from "./pawn"
 import rok from "./rok"
@@ -249,35 +250,31 @@ export default {
             }
             else if(piece == "pawn") {
                 if(this.chess_board[x][y].color == "white" && this.turn == 1) {
-                    if(this.chess_board[x][y].move_count == 0) {
-                        if((y - 1) > -1 && this.chess_board[x][y - 1].piece == empty) {
-                            this.chess_board[x][y - 1].effected = true;
-                            if((y - 2) > -1 && this.chess_board[x][y - 2].piece == empty) {
-                                this.chess_board[x][y - 2].effected = true;
-                            }
+                    if((y - 1) > -1 && this.chess_board[x][y - 1].piece == empty) {
+                        this.chess_board[x][y - 1].effected = true;
+                        if((y - 2) > -1 && this.chess_board[x][y - 2].piece == empty && this.chess_board[x][y].move_count == 0) {
+                            this.chess_board[x][y - 2].effected = true;
                         }
-                        if((x - 1) > -1 && (y - 1) > -1 && this.chess_board[x - 1][y - 1].color != "white" && this.chess_board[x - 1][y - 1].piece != empty) {
-                            this.chess_board[x - 1][y - 1].effected = true;
-                        }
-                        if((x + 1) < 8 && (y - 1) > -1 && this.chess_board[x + 1][y - 1].color != "white" && this.chess_board[x + 1][y - 1].piece != empty) {
-                            this.chess_board[x + 1][y - 1].effected = true;
-                        }
+                    }
+                    if((x - 1) > -1 && (y - 1) > -1 && this.chess_board[x - 1][y - 1].color != "white" && this.chess_board[x - 1][y - 1].piece != empty) {
+                        this.chess_board[x - 1][y - 1].effected = true;
+                    }
+                    if((x + 1) < 8 && (y - 1) > -1 && this.chess_board[x + 1][y - 1].color != "white" && this.chess_board[x + 1][y - 1].piece != empty) {
+                        this.chess_board[x + 1][y - 1].effected = true;
                     }
                 }
                 else if(this.chess_board[x][y].color == "black" && this.turn == 0) {
-                    if(this.chess_board[x][y].move_count == 0) {
-                        if((y + 1) < 8 && this.chess_board[x][y + 1].piece == empty) {
-                            this.chess_board[x][y + 1].effected = true;
-                            if((y + 2) < 8 && this.chess_board[x][y + 2].piece == empty) {
-                                this.chess_board[x][y + 2].effected = true;
-                            }
+                    if((y + 1) < 8 && this.chess_board[x][y + 1].piece == empty) {
+                        this.chess_board[x][y + 1].effected = true;
+                        if((y + 2) < 8 && this.chess_board[x][y + 2].piece == empty && this.chess_board[x][y].move_count == 0) {
+                            this.chess_board[x][y + 2].effected = true;
                         }
-                        if((x - 1) > -1 && (y + 1) < 8 && this.chess_board[x - 1][y + 1].color != "black" && this.chess_board[x - 1][y + 1].piece != empty) {
-                            this.chess_board[x - 1][y + 1].effected = true;
-                        }
-                        if((x + 1) < 8 && (y + 1) < 8 && this.chess_board[x + 1][y + 1].color != "black" && this.chess_board[x + 1][y + 1].piece != empty) {
-                            this.chess_board[x + 1][y + 1].effected = true;
-                        }
+                    }
+                    if((x - 1) > -1 && (y + 1) < 8 && this.chess_board[x - 1][y + 1].color != "black" && this.chess_board[x - 1][y + 1].piece != empty) {
+                        this.chess_board[x - 1][y + 1].effected = true;
+                    }
+                    if((x + 1) < 8 && (y + 1) < 8 && this.chess_board[x + 1][y + 1].color != "black" && this.chess_board[x + 1][y + 1].piece != empty) {
+                        this.chess_board[x + 1][y + 1].effected = true;
                     }
                 }
             }
@@ -401,6 +398,7 @@ export default {
             }
         },
         effected : function(x, y, selected) {
+            console.log()
             if(selected){
                 this.changed_color.append([x, y])
                 return "effected"
